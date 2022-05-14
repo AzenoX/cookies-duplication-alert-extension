@@ -26,22 +26,43 @@ const allowedTypes = [
 
 // Refresh animation when changing option
 storageLocal.onChanged.addListener(function (changes) {
-    printAnimation(changes.cookieDanceType.newValue);
+    if (changes.cookieDanceType) {
+        printAnimation(changes.cookieDanceType.newValue || 'cookie');
+    }
+
+    if (changes.cookieDanceDisabled) {
+        if (changes.cookieDanceDisabled?.newValue === 'true') {
+            removeAnimation();
+        }
+        else {
+            storageLocal.sync.get(['cookieDanceType'], function(result) {
+                printAnimation(result.cookieDanceType || 'cookie');
+            });
+        }
+    }
+
 })
 
-storageLocal.sync.get(['cookieDanceType'], function(result) {
-    printAnimation(result.cookieDanceType || 'cookie');
+storageLocal.sync.get(['cookieDanceType', 'cookieDanceDisabled'], function(result) {
+    if (result.cookieDanceDisabled !== 'true') {
+        printAnimation(result.cookieDanceType || 'cookie');
+    }
 });
+
+
+function removeAnimation() {
+    const cookieElement = document.querySelector('#cookie-dance-wrapper');
+    if (cookieElement !== null) {
+        cookieElement.remove();
+    }
+}
 
 function printAnimation(animationType) {
     if (!allowedTypes.includes(animationType)) {
         return;
     }
 
-    const cookieElement = document.querySelector('#cookie-dance-wrapper');
-    if (cookieElement !== null) {
-        cookieElement.remove();
-    }
+    removeAnimation();
 
     // Variables definition
     let gifPath = 'https://i.imgur.com/VFsCYF2.gif'; // Cookie by default
@@ -78,6 +99,7 @@ function printAnimation(animationType) {
         }).join("")}
                         </ul>
                     </div>
+                    <button id="cookie-dance-wrapper--delete-cookies" class="btn btn-primary btn-large">Delete all cookies</button>
                 </div>
             </div>
         </div>
@@ -89,5 +111,22 @@ function printAnimation(animationType) {
         const els = cookieGif.documentElement.querySelector('#cookie-dance-wrapper');
         fragment.appendChild(els);
         document.body.appendChild(fragment);
+
+        // Add event if clicked on delete cookies button
+        document.querySelector('#cookie-dance-wrapper--delete-cookies').addEventListener('click', () => {
+            deleteCookies();
+        });
     }
+}
+
+function deleteCookies() {
+    const runtime = chrome.runtime || runtime || null;
+    let domain = window.location.host.split('.').reverse();
+    domain = '.' + domain[1] + '.' + domain[0];
+
+    runtime.sendMessage({action: "deleteCookies", options: {
+        domain: domain
+    }}, function () {
+        window.location.reload();
+    });
 }

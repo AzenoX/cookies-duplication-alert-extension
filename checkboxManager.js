@@ -1,3 +1,4 @@
+const checked_disabled = document.querySelector('input[name="disabled"]');
 const animation_types = document.querySelectorAll('input[name="gif_type"]');
 
 const storageLocal = chrome.storage || storage || null;
@@ -9,7 +10,14 @@ const allowedTypes = [
 
 if (storageLocal) {
     // Init checkboxes state
-    storageLocal.sync.get(['cookieDanceType'], function(result) {
+    storageLocal.sync.get(['cookieDanceType', 'cookieDanceDisabled'], function(result) {
+        if (result.cookieDanceDisabled === 'true') {
+            checked_disabled.checked = true;
+        }
+        else {
+            checked_disabled.checked = false;
+        }
+
         if (allowedTypes.includes(result.cookieDanceType)) {
             switch (result.cookieDanceType) {
                 case 'eggplant':
@@ -30,5 +38,14 @@ if (storageLocal) {
                 storageLocal.sync.set({cookieDanceType: animation_type});
             }
         });
+    });
+
+    checked_disabled.addEventListener('change', () => {
+        if (checked_disabled.checked) {
+            storageLocal.sync.set({cookieDanceDisabled: 'true'});
+        }
+        else {
+            storageLocal.sync.set({cookieDanceDisabled: 'false'});
+        }
     });
 }
