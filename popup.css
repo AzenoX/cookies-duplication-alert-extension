@@ -1,0 +1,54 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 1rem;
+}
+
+h1 {
+    margin: 0 0 0.4rem 0 !important;
+
+    font-size: 4rem;
+    font-weight: bold;
+}
+h2 {
+    margin: 0 0 1rem 0 !important;
+
+    font-size: 1.6rem;
+    text-align: justify;
+}
+
+hr {
+    margin: 1rem;
+}
+
+h3 {
+    margin: 0 0 1rem 0 !important;
+
+    font-size: 1.2rem;
+    text-align: justify;
+}
+
+h4 {
+    margin: 0 0 0.4rem 0 !important;
+
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+}
+
+footer {
+    margin-top: 1rem;
+
+    text-align: center;
+    font-size: 0.9rem;
+    color: gray;
+    font-style: italic;
+}
