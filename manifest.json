@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "CookieDance",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description" : "A cookie is dancing when you have 2 or more cookies with the same name.",
     "icons": {
         "64": "icons/cookie_64.png",

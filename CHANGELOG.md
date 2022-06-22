@@ -1,6 +1,12 @@
 # Changelog
 
 
+## [1.2.0] - 2022-06-22
+
+### Added
+- Add a whitelist to allow cookie popup only on certain websites
+
+
 ## [1.1.0] - 2022-05-14
 
 ### Added
