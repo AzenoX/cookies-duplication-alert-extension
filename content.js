@@ -43,8 +43,16 @@ storageLocal.onChanged.addListener(function (changes) {
 
 })
 
-storageLocal.sync.get(['cookieDanceType', 'cookieDanceDisabled'], function(result) {
-    if (result.cookieDanceDisabled !== 'true') {
+storageLocal.sync.get(['cookieDanceType', 'cookieDanceDisabled', 'cookieDanceWhitelist'], function(result) {
+    const whitelist = result.cookieDanceWhitelist.split(',').map(e => e.trim()); // Array of whitelisted websites
+    const isWhitelisted =
+        whitelist.length === 0 || // If no whitelist has been set, then allow it everywhere
+        whitelist.filter(e => {
+            const regex = new RegExp('.*' + e + '$');
+            return regex.test(location.host);
+        }).length > 0;
+
+    if (isWhitelisted && result.cookieDanceDisabled !== 'true') {
         printAnimation(result.cookieDanceType || 'cookie');
     }
 });
