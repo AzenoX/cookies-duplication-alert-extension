@@ -3,6 +3,7 @@ const animation_types = document.querySelectorAll('input[name="gif_type"]');
 const whitelist = document.querySelector('input[name="whitelist"]');
 
 const storageLocal = chrome.storage || storage || null;
+const runtimeBrowser = chrome.runtime || runtime || null;
 
 const allowedTypes = [
     'cookie',
@@ -56,3 +57,7 @@ if (storageLocal) {
         }
     });
 }
+
+
+// Init app version placeholder
+document.querySelector('#app_version').textContent = runtimeBrowser.getManifest().version;
